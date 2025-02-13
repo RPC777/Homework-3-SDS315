@@ -6,7 +6,8 @@ output:
   pdf_document: default
   html_document: default
 ---
-github link:
+github link: https://github.com/RPC777/Homework-3-SDS315
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 library(ggplot2)
@@ -36,13 +37,11 @@ Problem 1
 # Theory A: Competition vs. Price
 Competition <- do(10000) * diffmean(Price ~ Competitors, data = resample(gasprices))
 
-# Histogram of Bootstrap Distribution
 ggplot(Competition, aes(x = diffmean)) +
   geom_histogram(binwidth = 0.005, color = "black", fill = "skyblue") +
   labs(title = "Bootstrap Distribution: Price Difference by Competition",
        x = "Difference in Mean Price", y = "Frequency")
 
-# 95% Confidence Interval
 confint(Competition, level = 0.95)
 
 
@@ -62,19 +61,15 @@ Theory A:
 
 ```{r}
 # Theory B: Income vs. Price Correlation
-# Bootstrap Correlation between Income and Price
 IncomePriceCor <- do(10000) * cor(resample(gasprices)$Income, resample(gasprices)$Price)
 
-# Check column names
 colnames(IncomePriceCor)
 
-# Use the correct column name for ggplot
 ggplot(IncomePriceCor, aes(x = cor)) +  # 'result' is the default column name
   geom_histogram(binwidth = 0.01, color = "black", fill = "lightgreen") +
   labs(title = "Bootstrap Distribution: Correlation between Income and Price",
        x = "Correlation", y = "Frequency")
 
-# Compute and display the 95% Confidence Interval
 confint(IncomePriceCor, level = 0.95)
 ```
 
@@ -93,13 +88,11 @@ Theory B:
 # Theory C: Stoplight vs. Price
 Stoplight <- do(10000) * diffmean(Price ~ Stoplight, data = resample(gasprices))
 
-# Histogram of Bootstrap Distribution
 ggplot(Stoplight, aes(x = diffmean)) +
   geom_histogram(binwidth = 0.005, color = "black", fill = "orange") +
   labs(title = "Bootstrap Distribution: Price Difference by Stoplight",
        x = "Difference in Mean Price", y = "Frequency")
 
-# 95% Confidence Interval
 confint(Stoplight, level = 0.95)
 
 ```
@@ -120,13 +113,10 @@ Theory C:
 # Theory D: Highway Access vs. Price
 Highway <- do(10000) * diffmean(Price ~ Highway, data = resample(gasprices))
 
-# Histogram of Bootstrap Distribution
 ggplot(Highway, aes(x = diffmean)) +
   geom_histogram(binwidth = 0.005, color = "black", fill = "purple") +
   labs(title = "Bootstrap Distribution: Price Difference by Highway Access",
        x = "Difference in Mean Price", y = "Frequency")
-
-# 95% Confidence Interval
 confint(Highway, level = 0.95)
 
 ```
@@ -147,13 +137,10 @@ Theory D:
 # Theory E: Shell vs. Other Brands
 Shell <- do(10000) * diffmean(Price ~ (Brand == 'Shell'), data = resample(gasprices))
 
-# Histogram of Bootstrap Distribution
 ggplot(Shell, aes(x = diffmean)) +
   geom_histogram(binwidth = 0.005, color = "black", fill = "red") +
   labs(title = "Bootstrap Distribution: Price Difference for Shell",
        x = "Difference in Mean Price", y = "Frequency")
-
-# 95% Confidence Interval
 confint(Shell, level = 0.95)
 
 ```
@@ -180,16 +167,13 @@ Problem 2
 # Filter data for 2011 S-Class 63 AMG
 amg2011 <- subset(sclass, year == 2011 & trim == "63 AMG")
 
-# Bootstrap confidence interval for average mileage
 MileageCI <- do(10000) * mean(~mileage, data = resample(amg2011))
 
-# Histogram of Bootstrap Distribution
 ggplot(MileageCI, aes(x = mean)) +
   geom_histogram(binwidth = 1000, color = "black", fill = "blue") +
   labs(title = "Bootstrap Distribution: Average Mileage (2011 S-Class 63 AMG)",
        x = "Average Mileage", y = "Frequency")
 
-# 95% Confidence Interval
 confint(MileageCI, level = 0.95)
 ```
 
@@ -204,29 +188,19 @@ confint(MileageCI, level = 0.95)
 Part B: Proportion of 2014 S-Class 550s that are Black
 
 ```{r}
-# Load necessary libraries
-library(mosaic)
-library(ggplot2)
-
-# Filter data for 2014 S-Class 550
 sclass2014 <- subset(sclass, year == 2014 & trim == "550")
 
-# Create isBlack variable
 sclass2014$isBlack <- sclass2014$color == "Black"
 
-# Bootstrap confidence interval for proportion of black cars
 BlackProp <- do(10000) * prop(~isBlack, data = resample(sclass2014))
 
-# Convert to data frame for ggplot
 BlackProp_df <- data.frame(prop = BlackProp[[1]])
 
-# Histogram of Bootstrap Distribution
 ggplot(BlackProp_df, aes(x = prop)) +
   geom_histogram(binwidth = 0.01, color = "black", fill = "red") +
   labs(title = "Bootstrap Distribution: Proportion of Black Cars (2014 S-Class 550)",
        x = "Proportion", y = "Frequency")
 
-# 95% Confidence Interval using quantiles
 quantile(BlackProp_df$prop, probs = c(0.025, 0.975))
 
 
@@ -240,19 +214,15 @@ Problem 3
 Part A-Who makes people happier – "Living with Ed" or "My Name is Earl"?
 
 ```{r}
-# Filtered dataset for the two shows
 ed_earl <- subset(nbc_pilotsurvey, Show %in% c("Living with Ed", "My Name is Earl"))
 
-# Bootstrap distribution of the difference in means
 HappyDiff <- do(10000) * diffmean(Q1_Happy ~ Show, data = resample(ed_earl))
 
-# Histogram of Bootstrap Distribution
 ggplot(HappyDiff, aes(x = diffmean)) +
   geom_histogram(binwidth = 0.05, color = "black", fill = "skyblue") +
   labs(title = "Bootstrap Distribution: Q1_Happy Difference (Ed vs. Earl)",
        x = "Difference in Mean Q1_Happy", y = "Frequency")
 
-# 95% Confidence Interval
 confint(HappyDiff, level = 0.95)
 ```
 
@@ -271,19 +241,15 @@ confint(HappyDiff, level = 0.95)
 Part B- Which reality show is more annoying – "Biggest Loser" or "The Apprentice: LA"?
 
 ```{r}
-# Filtered dataset for the two shows
 loser_apprentice <- subset(nbc_pilotsurvey, Show %in% c("The Biggest Loser", "The Apprentice: Los Angeles"))
 
-# Bootstrap distribution of the difference in means
 AnnoyedDiff <- do(10000) * diffmean(Q1_Annoyed ~ Show, data = resample(loser_apprentice))
 
-# Histogram of Bootstrap Distribution
 ggplot(AnnoyedDiff, aes(x = diffmean)) +
   geom_histogram(binwidth = 0.05, color = "black", fill = "orange") +
   labs(title = "Bootstrap Distribution: Q1_Annoyed Difference (Loser vs. Apprentice)",
        x = "Difference in Mean Q1_Annoyed", y = "Frequency")
 
-# 95% Confidence Interval
 confint(AnnoyedDiff, level = 0.95)
 ```
 
@@ -305,24 +271,18 @@ The confidence interval does not include zero, providing strong evidence that Th
 Part C-How many people find "Dancing with the Stars" confusing?
 
 ```{r}
-# Filtered dataset for the show
 dancing <- subset(nbc_pilotsurvey, Show == "Dancing with the Stars")
 
-# Calculate proportion for Q2_Confusing ≥ 4
 ConfusingProp <- do(10000) * prop(~ (Q2_Confusing >= 4), data = resample(dancing))
 
-# Rename the column to avoid confusion
 colnames(ConfusingProp) <- "prop"
 
 ConfusingProp_df <- data.frame(prop = ConfusingProp[[1]])
 
-# Histogram of Bootstrap Distribution
 ggplot(ConfusingProp, aes(x = prop)) +
   geom_histogram(binwidth = 0.01, color = "black", fill = "purple") +
   labs(title = "Bootstrap Distribution: Proportion Q2_Confusing ≥ 4 (Dancing with the Stars)",
        x = "Proportion", y = "Frequency")
-
-# 95% Confidence Interval
 quantile(ConfusingProp_df$prop, probs = c(0.025, 0.975))
 ```
 *Question:* What proportion of viewers find "Dancing with the Stars" confusing, with a rating of 4 or higher on the Q2_Confusing scale?
@@ -339,34 +299,26 @@ quantile(ConfusingProp_df$prop, probs = c(0.025, 0.975))
 Problem 4: eBay AdWords Experiment
 
 ```{r}
-# Calculate Revenue Ratio
 ebay <- ebay |>
   mutate(rev_ratio = rev_after / rev_before)
 
-# Separate Data into Treatment and Control Groups
 treatment <- filter(ebay, adwords_pause == 1)
 control <- filter(ebay, adwords_pause == 0)
 
-# Calculate Difference in Mean Revenue Ratio
 obs_diff <- mean(treatment$rev_ratio) - mean(control$rev_ratio)
 
-# Bootstrap Confidence Interval
 boot_diff <- do(10000) * (mean(~rev_ratio, data = resample(treatment)) - 
                           mean(~rev_ratio, data = resample(control)))
 
-# Rename column for convenience
 colnames(boot_diff) <- "diff"
 
-# Histogram of Bootstrap Distribution
 ggplot(boot_diff, aes(x = diff)) +
   geom_histogram(binwidth = 0.01, color = "black", fill = "gold") +
   labs(title = "Bootstrap Distribution: Difference in Revenue Ratio",
        x = "Difference in Revenue Ratio", y = "Frequency")
 
-# 95% Confidence Interval
 confint(boot_diff, level = 0.95)
 
-# Observed Difference
 obs_diff
 ```
 
